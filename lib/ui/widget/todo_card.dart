@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:less6_month3/data/local/app_database.dart';
 import 'package:less6_month3/ui/widget/todo_bottom_sheet.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 
 class TodoCard extends StatefulWidget {
   const TodoCard({super.key, required this.todoModel});
@@ -36,7 +37,7 @@ class _TodoCardState extends State<TodoCard> {
           children: [
             Row(
               children: [
-                Text(
+                Expanded(child: Text(
                   widget.todoModel.title,
                   style: TextStyle(
                     color: Colors.white,
@@ -44,7 +45,7 @@ class _TodoCardState extends State<TodoCard> {
                     decoration: done ? TextDecoration.lineThrough : null,
                   ),
                 ),
-                Spacer(),
+                ),
                 IconButton(onPressed: () => setState(() => done = !done), 
                 icon: Icon(
                   done ? Icons.check_box : Icons.check_box_outline_blank,
@@ -53,7 +54,7 @@ class _TodoCardState extends State<TodoCard> {
                 ),
                 IconButton(
                   onPressed: () {
-                    TodoBottomSheet(context);
+                    TodoBottomSheet(context, todo: widget.todoModel);
                   },
                   icon: Icon(Icons.edit, color: Colors.white),
                 ),
@@ -86,7 +87,7 @@ class _TodoCardState extends State<TodoCard> {
                               ),
                             ),
                             ElevatedButton(onPressed: (){
-                              Navigator.pop(context);
+                              context.read<TodoCubit>().delete(widget.todoModel.id);
                             }, 
                             style: ButtonStyle(
                               backgroundColor: WidgetStateProperty.all(
@@ -120,7 +121,7 @@ class _TodoCardState extends State<TodoCard> {
             style: TextStyle(
               color: Colors.white,
               fontSize: 16,
-              fontWeight: FontWeight.w200,
+              fontWeight: FontWeight.w900,
             ),
             ),
             SizedBox(height: 12),
